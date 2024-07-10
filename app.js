@@ -2,6 +2,7 @@ const express = require('express'); // express module
 const port = 3000; // port number
 const path = require('path'); // path module is used to set the path of views directory
 const mongoose = require('mongoose'); // mongoose module
+const ejsMate = require('ejs-mate'); // ejs-mate module(used to set the layout of the page)
 const methodOverride = require('method-override'); // method-override module(used to override the method of form(put, patch, delete))
 const Campground = require('./models/campground'); // campground model
 
@@ -20,6 +21,8 @@ app.set('views', path.join(__dirname, 'views')); // Set the path of views direct
 
 app.use(express.urlencoded({ extended: true })); // Parse the data from the form
 app.use(methodOverride('_method')); // Use the method-override module
+// use ejs-locals for all ejs templates:
+app.engine('ejs', ejsMate); // Set the layout of the page
 
 // Home page
 app.get('/', (req, res) => {

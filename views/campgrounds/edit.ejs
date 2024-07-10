@@ -1,37 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Campground</title>
-</head>
-<body>
+    <% layout('layouts/boilerplate') %>
+    <div class="container my-3"></div>
     <h1>Edit Campground</h1>
+    <div class="row"></div>
+    
     <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="campground[title]" value="<%= campground.title %>"> 
-            <!-- // This is the name attribute that will be used in the req.body object -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name="campground[title]" aria-describedby="title" value="<%= campground.title %>">
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="campground[location]" value="<%= campground.location %>"> 
-            <!-- // This is the name attribute that will be used in the req.body object -->
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" class="form-control" id="location" name="campground[location]" value="<%= campground.location %>">
         </div>
-        <div>
-            <label for="price">Price</label>
-            <input type="text" id="price" name="campground[price]" value="<%= campground.price %>"> 
-            <!-- // This is the name attribute that will be used in the req.body object -->
+        <div class="mb-3">
+            <label for="image" class="form-label">Image URL</label>
+            <input type="text" class="form-control" id="image" name="campground[image]" value="<%= campground.image %>">
+          </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <div class="input-group">
+            <span class="input-group-text" id="price">$</span>
+            <input type="text" class="form-control" id="price" name="campground[price]" placeholder="0" value="<%= campground.price %>">
+          </div>
         </div>
-        <div>
-            <label for="description">Description</label>
-            <textarea id="description" name="campground[description]" value="<%= campground.description %>"></textarea>
-            <!-- // This is the name attribute that will be used in the req.body object -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="campground[description]" value="<%= campground.description %>"> <%= campground.description %> </textarea>
         </div>
-        <button >Edit Campground</button>
+        <button type="submit" class="btn btn-success">Edit Campground</button>
     </form>
-    <footer>
-        <a href="/campgrounds/<%= campground._id %>">Go Back</a>
-    </footer>
-</body>
-</html>
+</div>
+</div>
+    <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary my-3">Go Back</a>
