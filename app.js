@@ -5,6 +5,7 @@ const mongoose = require('mongoose'); // mongoose module
 const ejsMate = require('ejs-mate'); // ejs-mate module(used to set the layout of the page)
 const methodOverride = require('method-override'); // method-override module(used to override the method of form(put, patch, delete))
 const Campground = require('./models/campground'); // campground model
+const campgroundSchema = require('./schemas'); // schema module joi
 const ExpressError = require('./utils/ExpressError'); // ExpressError module
 const catchAsync = require('./utils/catchAsync'); // catchAsync module
 
@@ -23,6 +24,17 @@ app.set('views', path.join(__dirname, 'views')); // Set the path of views direct
 
 app.use(express.urlencoded({ extended: true })); // Parse the data from the form
 app.use(methodOverride('_method')); // Use the method-override module
+
+const validateCampground = (req,res,next)=>{
+  
+  const {error} = campgroundSchema.validate(req.body);
+  if(error){
+    const msg = error.details.map(el=>el.message).join(',')
+    throw new ExpressError(msg,400)
+  }else{
+    next();
+  }
+}
 // use ejs-locals for all ejs templates:
 app.engine('ejs', ejsMate); // Set the layout of the page
 
@@ -38,8 +50,7 @@ app.get('/campgrounds', catchAsync(async (req,res,next)=>{
 }))
 
 // Post new Campground
-app.post('/campgrounds', catchAsync(async (req,res,next)=>{
-
+app.post('/campgrounds', validateCampground, catchAsync(async (req,res,next)=>{
   const camp = new Campground(req.body.campground);
   await camp.save();
   res.redirect(`/campgrounds/${camp._id}`);
@@ -58,7 +69,7 @@ app.get('/campgrounds/:id',catchAsync( async (req,res,next)=>{
 }))
 
 //Put(Edit Campground)
-app.put('/campgrounds/:id', catchAsync(async (req,res,next)=>{
+app.put('/campgrounds/:id', validateCampground,catchAsync(async (req,res,next)=>{
   const {id} = req.params;
   const camp = await Campground.findByIdAndUpdate(id,{...req.body.campground});
   res.redirect(`/campgrounds/${camp._id}`);
@@ -83,8 +94,9 @@ app.all('*',(req,res,next)=>{
 })
 
 app.use((err,req,res,next)=>{  
-    const{statusCode = 500, message= 'Something went wrong'} = err;
-    res.status(statusCode).send(message);
+    // const{statusCode = 500, message= 'Something went wrong'} = err;
+    // res.status(statusCode).send(message);
+    res.render('error',{err});
 });
 
 // listen to the port
