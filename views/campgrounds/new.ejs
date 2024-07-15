@@ -2,29 +2,59 @@
 <div class="container my-3">
     <h1>Make New Campground</h1>
     <div class="row">
-    <form action="/campgrounds" method="POST">
+    <form action="/campgrounds" method="POST" novalidate class="validated-form">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" id="title" name="campground[title]" aria-describedby="title">
+          <input type="text" class="form-control" id="title" name="campground[title]" aria-describedby="title" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Title cannot be blank.
+          </div>
         </div>
         <div class="mb-3">
           <label for="location" class="form-label">Location</label>
-          <input type="text" class="form-control" id="location" name="campground[location]">
+          <input type="text" class="form-control" id="location" name="campground[location]" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Location cannot be blank.
+          </div>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image URL</label>
-            <input type="text" class="form-control" id="image" name="campground[image]">
+            <input type="text" class="form-control" id="image" name="campground[image]" required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Image URL cannot be blank.
+            </div>  
           </div>
         <div class="mb-3">
           <label for="price" class="form-label">Price</label>
           <div class="input-group">
             <span class="input-group-text" id="price">$</span>
-            <input type="text" class="form-control" id="price" name="campground[price]" placeholder="0">
+            <input type="text" class="form-control" id="price" name="campground[price]" placeholder="0" required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Price cannot be blank.
+            </div>
           </div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea class="form-control" id="description" name="campground[description]"></textarea>
+          <textarea class="form-control" id="description" name="campground[description]" required></textarea>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Description cannot be blank.
+          </div>
         </div>
         <button type="submit" class="btn btn-success">Add Campground</button>
       </form>
@@ -33,3 +63,24 @@
     <a href="/campgrounds" class="btn btn-primary my-3">Go Back</a>
 
 </div>
+
+<script>
+  (() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>

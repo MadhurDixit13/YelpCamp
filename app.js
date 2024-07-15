@@ -5,6 +5,8 @@ const mongoose = require('mongoose'); // mongoose module
 const ejsMate = require('ejs-mate'); // ejs-mate module(used to set the layout of the page)
 const methodOverride = require('method-override'); // method-override module(used to override the method of form(put, patch, delete))
 const Campground = require('./models/campground'); // campground model
+const ExpressError = require('./utils/ExpressError'); // ExpressError module
+const catchAsync = require('./utils/catchAsync'); // catchAsync module
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {}); // Connect to the database
 
@@ -27,53 +29,62 @@ app.engine('ejs', ejsMate); // Set the layout of the page
 // Home page
 app.get('/', (req, res) => {
     res.render('home');
-});
-
-// Campgrounds page
-app.get('/campgrounds', async (req,res)=>{
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index',{campgrounds});
 })
 
+// Campgrounds page
+app.get('/campgrounds', catchAsync(async (req,res,next)=>{
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index',{campgrounds});
+}))
+
 // Post new Campground
-app.post('/campgrounds', async (req,res)=>{
+app.post('/campgrounds', catchAsync(async (req,res,next)=>{
 
   const camp = new Campground(req.body.campground);
-  camp.save();
+  await camp.save();
   res.redirect(`/campgrounds/${camp._id}`);
-});
+}))
 
 // Create a new campground
 app.get('/campgrounds/new', (req,res)=>{
   res.render('campgrounds/new');
-});
+})
 
 // Campground Show Page
-app.get('/campgrounds/:id', async (req,res)=>{
+app.get('/campgrounds/:id',catchAsync( async (req,res,next)=>{
     const {id} = req.params;
     const campground = await Campground.findById(id);
     res.render('campgrounds/show',{campground});
-});
+}))
 
 //Put(Edit Campground)
-app.put('/campgrounds/:id', async (req,res)=>{
+app.put('/campgrounds/:id', catchAsync(async (req,res,next)=>{
   const {id} = req.params;
   const camp = await Campground.findByIdAndUpdate(id,{...req.body.campground});
   res.redirect(`/campgrounds/${camp._id}`);
-});
+}))
 
 // Delete Campground
-app.delete('/campgrounds/:id', async (req,res)=>{
+app.delete('/campgrounds/:id', catchAsync(async (req,res,next)=>{
   const {id} = req.params;
   await Campground.findByIdAndDelete(id);
   res.redirect('/campgrounds');
-});
+}))
 
 // Edit Campground
-app.get('/campgrounds/:id/edit', async (req,res)=>{
+app.get('/campgrounds/:id/edit', catchAsync(async (req,res,next)=>{
   const {id} = req.params;
   const campground = await Campground.findById(id);
   res.render('campgrounds/edit',{campground});
+}))
+
+app.all('*',(req,res,next)=>{
+    next(new ExpressError('Page Not Found',404));
+})
+
+app.use((err,req,res,next)=>{  
+    const{statusCode = 500, message= 'Something went wrong'} = err;
+    res.status(statusCode).send(message);
 });
 
 // listen to the port
