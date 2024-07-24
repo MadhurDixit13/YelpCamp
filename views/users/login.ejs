@@ -1,0 +1,28 @@
+<!-- login form -->
+<% layout('layouts/boilerplate') %>
+<div class="my-3 container">
+<h1>Login</h1>
+<form action="/users/login" method="post" class="validated-form" novalidate>
+  <div class="form-group mb-3">
+    <label for="email">Email address</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Email cannot be blank.
+      </div>
+  </div>
+  <div class="form-group mb-3">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Password cannot be blank.
+      </div>
+  </div>
+  <button type="submit" class="btn btn-primary my-3">Login</button>
+</form>
+</div>

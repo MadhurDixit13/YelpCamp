@@ -9,6 +9,9 @@ const methodOverride = require('method-override'); // method-override module(use
 const ExpressError = require('./utils/ExpressError'); // ExpressError module
 const campgrounds = require('./routes/campgrounds'); // campgrounds route
 const reviews = require('./routes/reviews'); // reviews route
+const passport = require('passport'); // passport module
+const LocalStrategy = require('passport-local'); // passport-local module
+const User = require('./models/user'); // user module
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {}); // Connect to the database
 
@@ -26,6 +29,8 @@ app.set('views', path.join(__dirname, 'views')); // Set the path of views direct
 app.use(express.urlencoded({ extended: true })); // Parse the data from the form
 app.use(methodOverride('_method')); // Use the method-override module
 app.use(express.static(path.join(__dirname, 'views'))); // Set the path of public directory
+app.use(express.static(path.join(__dirname, 'public'))); // Set the path of public directory
+
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret',
@@ -39,18 +44,35 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig)); // Use the session module
 app.use(flash()); // Use the flash module
+app.use(passport.initialize()); // Use the passport module
+app.use(passport.session()); // Use the passport module
+passport.use(new LocalStrategy(User.authenticate())); // Use the LocalStrategy module
+passport.serializeUser(User.serializeUser()); // Serialize the user
+passport.deserializeUser(User.deserializeUser()); // Deserialize the user
+
 
 app.use((req,res,next)=>{
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
+
 // use ejs-locals for all ejs templates:
 app.engine('ejs', ejsMate); // Set the layout of the page
 
+const isLoggedIn = (req,res,next)=>{
+    if(!req.isAuthenticated()){
+        req.flash('error','You must be signed in first!'); // Flash message
+        return res.redirect('/login');
+    }
+    next();
+}
 
 app.use('/campgrounds',campgrounds); // Use the campgrounds route
 app.use('/campgrounds/:id/reviews',reviews); // Use the reviews route
+app.use('/users',require('./routes/users')); // Use the users route`
+
+
 
 // Home page
 app.get('/', (req, res) => {
