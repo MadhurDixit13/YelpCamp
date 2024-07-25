@@ -9,6 +9,7 @@ const methodOverride = require('method-override'); // method-override module(use
 const ExpressError = require('./utils/ExpressError'); // ExpressError module
 const campgrounds = require('./routes/campgrounds'); // campgrounds route
 const reviews = require('./routes/reviews'); // reviews route
+const users = require('./routes/users'); // users route
 const passport = require('passport'); // passport module
 const LocalStrategy = require('passport-local'); // passport-local module
 const User = require('./models/user'); // user module
@@ -52,6 +53,7 @@ passport.deserializeUser(User.deserializeUser()); // Deserialize the user
 
 
 app.use((req,res,next)=>{
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
@@ -60,17 +62,10 @@ app.use((req,res,next)=>{
 // use ejs-locals for all ejs templates:
 app.engine('ejs', ejsMate); // Set the layout of the page
 
-const isLoggedIn = (req,res,next)=>{
-    if(!req.isAuthenticated()){
-        req.flash('error','You must be signed in first!'); // Flash message
-        return res.redirect('/login');
-    }
-    next();
-}
-
+app.use('/',users); // Use the users route`
 app.use('/campgrounds',campgrounds); // Use the campgrounds route
 app.use('/campgrounds/:id/reviews',reviews); // Use the reviews route
-app.use('/users',require('./routes/users')); // Use the users route`
+
 
 
 

@@ -3,6 +3,7 @@ const router = express.Router(); // Create a new router
 const catchAsync = require('../utils/catchAsync'); // catchAsync module
 const User = require('../models/user'); // user module
 const passport = require('passport'); // passport module
+const { storeReturnTo } = require('../middleware');
 
 // Register page
 router.get('/register', (req, res) => {
@@ -32,18 +33,22 @@ router.get('/login', (req, res) => {
 })
 
 // Login user
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
+router.post('/login', storeReturnTo, passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
     req.flash('success', 'Welcome back!');
-    const redirectUrl = req.session.returnTo || '/campgrounds';
+    const redirectUrl = res.locals.returnTo || '/campgrounds';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
 })
 
 // Logout user
-router.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success', 'Goodbye!');
-    res.redirect('/campgrounds');
-})
+router.get('/logout', (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        req.flash('success', 'Goodbye!');
+        res.redirect('/campgrounds');
+    });
+}); 
 
 module.exports = router; // Export the router

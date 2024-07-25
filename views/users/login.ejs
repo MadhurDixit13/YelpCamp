@@ -2,15 +2,15 @@
 <% layout('layouts/boilerplate') %>
 <div class="my-3 container">
 <h1>Login</h1>
-<form action="/users/login" method="post" class="validated-form" novalidate>
+<form action="/login" method="post" class="validated-form" novalidate>
   <div class="form-group mb-3">
-    <label for="email">Email address</label>
-    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+    <label for="username">User Name</label>
+    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
     <div class="valid-feedback">
         Looks good!
       </div>
       <div class="invalid-feedback">
-        Email cannot be blank.
+        Username cannot be blank.
       </div>
   </div>
   <div class="form-group mb-3">
