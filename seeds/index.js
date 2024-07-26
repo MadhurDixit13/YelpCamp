@@ -22,7 +22,8 @@ const seedDB = async () => {
             price: Math.floor(Math.random() * 20) + 10, // Price of the campground
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, nemo.', // Description of the campground
             location: `${cities[random1000].city}, ${cities[random1000].state}`, // Location of the campground
-            image: `https://picsum.photos/400?random=${Math.random()}` // Image of the campground
+            image: `https://picsum.photos/400?random=${Math.random()}`, // Image of the campground
+            author: '66a092e7dcd674bcda4d488e' // Author of the campground
         });
         await camp.save(); // Save the campground
     }

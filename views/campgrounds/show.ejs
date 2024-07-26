@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 <div class="container my-3">
   <div class="row">
-    <div class="col-3 d-inline">
+    <div class="col-3">
       <div class="card" style="width: 18rem;">
           <img src="<%= campground.image %>" class="card-img-top" alt="<%= campground.title %>">
           <div class="card-body">
@@ -9,34 +9,50 @@
             <p class="card-text"><%= campground.description %></p>
           </div>
           <ul class="list-group list-group-flush">
+            <li class="list-group-item text-muted"><%= campground.location %></li>
             <li class="list-group-item">Price: $<%= campground.price %></li>
-            <li class="list-group-item"><%= campground.location %></li>
+            <li class="list-group-item text-muted">Submitted by: <%= campground.author.username %></li>
           </ul>
+          <% if(currentUser && currentUser._id.equals(campground.author._id)) { %>
           <div class="card-body">
-            <a href="/campgrounds" class="card-link">Go Back</a>
-            <a href="/campgrounds/<%= campground._id %>/edit" class="card-link">Edit</a>
-            <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-              <button class="btn btn-danger my-2">Delete</button>
-          </form>
-        </div>
+            <!-- <a href="/campgrounds" class="card-link">Go Back</a> -->
+            <div class="row ">
+                <div class="col-3">
+                  <a href="/campgrounds/<%= campground._id %>/edit" class="card-link btn btn-primary my-2">Edit</a>
+                </div>
+                <div class="col-3">
+                  <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger my-2">Delete</button>
+                  </form>
+                </div>
+            </div>
+          </div>
+          <% } %>
       </div>
     </div>
-    <div class="col-6 d-inline">
+    <div class="col-6">
       <% for (let review of campground.reviews){ %>
       <div class="card mb-2">
           <div class="card-body">
-            <p class="card-text"><%= review.body %></p>
             <p class="card-text">Rating: <%= review.rating %></p>
-            <a href="/campgrounds/<%= campground._id %>/edit" class="card-link">Edit</a>
-            <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
-              <button class="btn btn-danger my-2">Delete</button>
-          </form>
+            <p class="card-text"><%= review.body %></p>
+            <p class="card-text">Author: <%= review.author.username %></p>
+            <% if(currentUser && currentUser._id.equals(review.author._id)) { %>
+              <div class="row">
+                <div class="col-2">
+                  <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger my-2">Delete</button>
+                  </form>
+                </div>
+              </div>
+          <% } %>
         </div>
       </div>
       <% }; %>
     </div>
     
   </div>
+  <% if(currentUser){ %>
   <div class="row">
     <div class="col-3">
       <h2 class="my-2">Leave a review</h2>
@@ -65,5 +81,6 @@
     </form>
   </div>
   </div>
+  <% } %>
 </div>
 
