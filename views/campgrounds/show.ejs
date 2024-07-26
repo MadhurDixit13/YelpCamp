@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate') %>
+<link rel="stylesheet" type="text/css" href="/stylesheets/stars.css">
 <div class="container my-3">
   <div class="row">
     <div class="col-3">
@@ -10,7 +11,7 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item text-muted"><%= campground.location %></li>
-            <li class="list-group-item">Price: $<%= campground.price %></li>
+            <li class="list-group-item">Price: $<%= campground.price %>/night</li>
             <li class="list-group-item text-muted">Submitted by: <%= campground.author.username %></li>
           </ul>
           <% if(currentUser && currentUser._id.equals(campground.author._id)) { %>
@@ -34,9 +35,12 @@
       <% for (let review of campground.reviews){ %>
       <div class="card mb-2">
           <div class="card-body">
-            <p class="card-text">Rating: <%= review.rating %></p>
+            <h5 class="card-title"><%= review.author.username %></h5>
+            <!-- <p class="card-text">Rating: </p> -->
+            <p class="starability-result" data-rating="<%= review.rating %>">
+              Rated: <%= review.rating %> stars
+            </p>
             <p class="card-text"><%= review.body %></p>
-            <p class="card-text">Author: <%= review.author.username %></p>
             <% if(currentUser && currentUser._id.equals(review.author._id)) { %>
               <div class="row">
                 <div class="col-2">
@@ -67,9 +71,22 @@
           Review Body cannot be blank.
         </div>
       </div>
-      <div class="mb-3">
-        <label for="rating" class="form-label">Rating</label>
-        <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
+      <div class="mb-3">   
+        <!-- <label ></label> -->
+        <fieldset class="starability-basic">
+          <legend for="rating" class="form-label">Rating:</legend>
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
         <div class="valid-feedback">
           Looks good!
         </div>
