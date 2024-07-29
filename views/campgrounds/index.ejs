@@ -7,8 +7,13 @@
                 <div class="container my-2">
                 <div class="card">
                     <div class="row">
-                        <div class="col-3">
-                            <img src="<%= campground.image %>" class="img-fluid card-img-top" alt="<%= campground.title %>">
+                        <div class="col-3">  
+                            <% if(campground.images.length){ %>
+                                <img src="<%= campground.images[0].url %>" class="img-fluid card-img-top" alt="<%= campground.title %>">
+                            <% }else{ %>
+                                <img src="https://res.cloudinary.com/dilvwd6d9/image/upload/c_thumb,w_200,g_face/v1722130414/YelpCamp/ljbma6otemkwu8wz2sja.jpg" class="img-fluid card-img-top" alt="<%= campground.title %>">
+                            <% } %>
+                            <!-- <img src="<%= campground.image %>" class="img-fluid card-img-top" alt="<%= campground.title %>"> -->
                         </div>
                         <div class="col-9 card-body">
                             <h5 class="card-title"><%= campground.title %></h5>
@@ -21,3 +26,7 @@
             </li>
         <% }; %>
     </ul>
+    <script>
+        const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+        const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
+      </script>

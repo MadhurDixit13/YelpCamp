@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+
 const express = require('express'); // express module
 const port = 3000; // port number
 const path = require('path'); // path module is used to set the path of views directory
@@ -13,6 +18,9 @@ const users = require('./routes/users'); // users route
 const passport = require('passport'); // passport module
 const LocalStrategy = require('passport-local'); // passport-local module
 const User = require('./models/user'); // user module
+const multer = require('multer'); // multer module
+const { storage, cloudinary } = require('./cloudinary/index.js'); // cloudinary module
+const upload = multer({ storage }); // multer storage
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {}); // Connect to the database
 

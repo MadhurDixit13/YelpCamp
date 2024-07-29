@@ -2,7 +2,7 @@
 <div class="container my-3">
     <h1>Make New Campground</h1>
     <div class="row">
-    <form action="/campgrounds" method="POST" novalidate class="validated-form">
+    <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" id="title" name="campground[title]" aria-describedby="title" required>
@@ -23,7 +23,20 @@
             Location cannot be blank.
           </div>
         </div>
-        <div class="mb-3">
+        
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="image">Upload Image</label>
+            <input type="file" class="form-control" id="image" name="campground[image]" multiple required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Image cannot be blank.
+            </div>  
+        </div>
+            
+       
+        <!-- <div class="mb-3">
             <label for="image" class="form-label">Image URL</label>
             <input type="text" class="form-control" id="image" name="campground[image]" required>
             <div class="valid-feedback">
@@ -32,7 +45,7 @@
             <div class="invalid-feedback">
               Image URL cannot be blank.
             </div>  
-          </div>
+          </div> -->
         <div class="mb-3">
           <label for="price" class="form-label">Price</label>
           <div class="input-group">
