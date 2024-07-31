@@ -24,7 +24,7 @@ const seedDB = async () => {
             location: `${cities[random1000].city}, ${cities[random1000].state}`, // Location of the campground
             geometry: {
                 type: 'Point',
-                coordinates: [ -78.63909903913735, 35.780397843865224 ]
+                coordinates: [ cities[random1000].longitude, cities[random1000].latitude ] // Coordinates of the campground
               }, // Coordinates of the campground
             images: [{url:"https://res.cloudinary.com/dilvwd6d9/image/upload/v1722131211/YelpCamp/xlexvyxq1s0rxamqg3h1.jpg",
                     filename:"YelpCamp/xlexvyxq1s0rxamqg3h1"

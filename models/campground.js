@@ -2,6 +2,7 @@ const mongoose = require('mongoose'); // mongoose module
 const Schema = mongoose.Schema; // mongoose schema
 const Review = require('./review'); // review module
 const { campgroundSchema } = require('../schemas');
+const opts = { toJSON: { virtuals: true } }; // Options for the virtuals
 
 const ImageSchema = new Schema({
     url: String,
@@ -10,6 +11,7 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('thumbnail').get(function(){
     return this.url.replace('/upload','/upload/w_200');
 })
+
 const CampgroundSchema = new Schema({
     title: String,
     price: Number,
@@ -39,7 +41,12 @@ const CampgroundSchema = new Schema({
             ref: 'Review'
         }
     ]
-}); // Create a new campground schema
+}, opts); // Create a new campground schema
+
+CampgroundSchema.virtual('properties.popUpMarkup').get(function(){
+    return `<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0,20)}...</p>`;
+}); // Virtual for the popup markup
 
 CampgroundSchema.post('findOneAndDelete', async function(doc){
     if(doc){
