@@ -44,9 +44,13 @@ To run YelpCamp locally, follow these steps:
     - Create a `.env` file in the root directory
     - Add the following environment variables:
       ```
-      DATABASE_URL=<your-mongodb-connection-string>
-      SECRET=<your-secret-key>
-      MAPTILER_KEY=<your-maptiler-key>
+      CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+      CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+      CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+      MAPTILER_API_KEY =<your-maptiler-api-key>
+      MONGODB_URL=<your-mongodb_url>
+      SECRET =<your-session-secret>
+      
       ```
 
 5. Run the application
@@ -75,17 +79,27 @@ To run YelpCamp locally, follow these steps:
 - Cloudinary for image storage
 - Multer for file uploads
 - Connect-flash for flash messages
+- Render for deployment
 
 ## Screenshots
 
 ### Home Page
 ![Home Page](screenshots/home.png)
 
+### All Campgrounds
+![All Campgrounds Page](screenshots/all.png)
+
 ### Campground Details
 ![Campground Details](screenshots/details.png)
 
 ### Add Campground
 ![Add Campground](screenshots/add.png)
+
+### Login
+![Login](screenshots/login.png)
+
+### Register
+![Register](screenshots/register.png)
 
 ## Acknowledgements
 
